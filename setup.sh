@@ -55,18 +55,18 @@ install_programs() {
     ulauncher_added=false
     vscode_added=false
 
-    if ask_yes_no "Möchtest du Audacity installieren?"; then
+    if ask_yes_no "Audacity installieren?"; then
         app_from_repo+="audacity "
     fi
 
-    if ask_yes_no "Möchtest du Brave installieren?"; then
+    if ask_yes_no "Brave installieren?"; then
         curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
         curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
         repo_added=true
         brave_added=true
     fi
 
-    if ask_yes_no "Möchtest du Docker installieren?"; then
+    if ask_yes_no "Docker installieren?"; then
         # Entferne alte Docker- und Container-Pakete in mehreren Zeilen zur besseren Lesbarkeit
         packages_to_remove=(
             docker.io
@@ -91,40 +91,40 @@ install_programs() {
         docker_added=true
     fi
 
-    if ask_yes_no "Möchtest du Fancontrol (für Lüftersteuerung) installieren?"; then
+    if ask_yes_no "Fancontrol (für Lüftersteuerung) installieren?"; then
         app_from_repo+="fancontrol lm-sensors "
     fi
 
-    if ask_yes_no "Möchtest du FileZilla installieren?"; then
+    if ask_yes_no "FileZilla installieren?"; then
         app_from_repo+="filezilla "
     fi
 
-    if ask_yes_no "Möchtest du GitKraken installieren?"; then
+    if ask_yes_no "GitKraken installieren?"; then
         curl -s https://release.gitkraken.com/linux/gitkraken-amd64.deb -o /tmp/gitkraken.deb
         gitkraken_added=true
     fi
 
-    if ask_yes_no "Möchtest du Handbrake installieren?"; then
+    if ask_yes_no "Handbrake installieren?"; then
         app_from_repo+="handbrake handbrake-cli "
     fi
 
-    if ask_yes_no "Möchtest du Inkscape installieren?"; then
+    if ask_yes_no "Inkscape installieren?"; then
         app_from_repo+="inkscape "
     fi
 
-    if ask_yes_no "Möchtest du KeePassXC installieren?"; then
+    if ask_yes_no "KeePassXC installieren?"; then
         app_from_repo+="keepassxc "
     fi
 
-    if ask_yes_no "Möchtest du Lutris installieren?"; then
+    if ask_yes_no "Lutris installieren?"; then
         app_from_repo+="lutris "
     fi
 
-    if ask_yes_no "Möchtest du das Papirus Icon Theme installieren?"; then
+    if ask_yes_no "Papirus Icon Theme installieren?"; then
         app_from_repo+="papirus-icon-theme "
     fi
 
-    if ask_yes_no "Möchtest du Softmaker Office installieren?"; then
+    if ask_yes_no "Softmaker Office installieren?"; then
         mkdir -p /etc/apt/keyrings
         wget -qO- https://shop.softmaker.com/repo/linux-repo-public.key | gpg --dearmor > /etc/apt/keyrings/softmaker.gpg
         echo "deb [signed-by=/etc/apt/keyrings/softmaker.gpg] https://shop.softmaker.com/repo/apt stable non-free" > /etc/apt/sources.list.d/softmaker.list
@@ -132,17 +132,17 @@ install_programs() {
         office_added=true
     fi
 
-    if ask_yes_no "Möchtest du Steam installieren?"; then
+    if ask_yes_no "Steam installieren?"; then
         app_from_repo+="steam-installer steam-devices "
     fi
 
     # Synology Drive Client, nur .deb verfügbar, muss daher regelmäßig aktualisiert werden
-    if ask_yes_no "Möchtest du die Synology Drive Client installieren?"; then
+    if ask_yes_no "Synology Drive Client installieren?"; then
         wget -O /tmp/synology-drive-client.deb https://global.synologydownload.com/download/Utility/SynologyDriveClient/3.5.2-16111/Ubuntu/Installer/synology-drive-client-16111.x86_64.deb
         synology_added=true
     fi
 
-    if ask_yes_no "Möchtest du ULauncher (MacOS inspirierter Launcher) installieren?"; then
+    if ask_yes_no "ULauncher (MacOS inspirierter Launcher) installieren?"; then
         curl -s https://api.github.com/repos/Ulauncher/Ulauncher/releases/latest \
             | grep "browser_download_url.*deb" \
             | cut -d : -f 2,3 \
@@ -151,7 +151,7 @@ install_programs() {
         ulauncher_added=true
     fi
 
-    if ask_yes_no "Möchtest du VS Code installieren?"; then
+    if ask_yes_no "VS Code installieren?"; then
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /usr/share/keyrings/ms-vscode.gpg > /dev/null
         echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ms-vscode.gpg] https://packages.microsoft.com/repos/code stable main" | \
             tee /etc/apt/sources.list.d/vscode.list
@@ -224,44 +224,44 @@ install_flatpak_programs() {
     signal_access=false
     telegram_access=false
     discord_access=false
-    if ask_yes_no "Möchtest du Spotify installieren?"; then
+    if ask_yes_no "Spotify installieren?"; then
         flatpak_apps+="com.spotify.Client "
     fi
-    if ask_yes_no "Möchtest du Signal installieren?"; then
+    if ask_yes_no "Signal installieren?"; then
         flatpak_apps+="org.signal.Signal "
-        if ask_yes_no "Möchtest du Signal Zugriff auf dein Home-Verzeichnis geben?"; then
+        if ask_yes_no "Signal Zugriff auf dein Home-Verzeichnis geben?"; then
             signal_access=true
         fi
     fi
-    if ask_yes_no "Möchtest du Discord installieren?"; then
+    if ask_yes_no "Discord installieren?"; then
         flatpak_apps+="com.discordapp.Discord "
-        if ask_yes_no "Möchtest du Discord Zugriff auf dein Home-Verzeichnis geben?"; then
+        if ask_yes_no "Discord Zugriff auf dein Home-Verzeichnis geben?"; then
             discord_access=true
         fi
     fi
-    if ask_yes_no "Möchtest du die Plex Desktop App & PlexAmp installieren?"; then
+    if ask_yes_no "Plex Desktop App & PlexAmp installieren?"; then
         flatpak_apps+="com.plexapp.PlexDesktop "
         flatpak_apps+="com.plexapp.PlexAmp "
     fi
-    if ask_yes_no "Möchtest du Bitwarden installieren?"; then
+    if ask_yes_no "Bitwarden installieren?"; then
         flatpak_apps+="com.bitwarden.desktop "
     fi
-    if ask_yes_no "Möchtest du Vuescan installieren?"; then
+    if ask_yes_no "Vuescan installieren?"; then
         flatpak_apps+="com.vuescan.VueScan "
     fi
-    if ask_yes_no "Möchtest du Telegram installieren?"; then
+    if ask_yes_no "Telegram installieren?"; then
         flatpak_apps+="org.telegram.desktop "
-        if ask_yes_no "Möchtest du Telegram Zugriff auf dein Home-Verzeichnis geben?"; then
+        if ask_yes_no "Telegram Zugriff auf dein Home-Verzeichnis geben?"; then
             telegram_access=true
         fi
     fi
-    if ask_yes_no "Möchtest du Threema installieren?"; then
+    if ask_yes_no "Threema installieren?"; then
         flatpak_apps+="ch.threema.threema-web-desktop "
-        if ask_yes_no "Möchtest du Threema Zugriff auf dein Home-Verzeichnis geben?"; then
+        if ask_yes_no "Threema Zugriff auf dein Home-Verzeichnis geben?"; then
             threema_access=true
         fi
     fi
-    if ask_yes_no "Möchtest du FreeTube (Werbefreier Youtube Client) installieren?"; then
+    if ask_yes_no "FreeTube (Werbefreier Youtube Client) installieren?"; then
         flatpak_apps+="com.github.freetubeapp.FreeTube "
     fi
     if [[ -n "$flatpak_apps" ]]; then
@@ -302,16 +302,16 @@ if [[ $EUID -ne 0 ]]; then
     fi
 fi
 
-if ask_yes_no "Möchtest du die Spiegelserver ändern?"; then
+if ask_yes_no "Spiegelserver ändern?"; then
     change_mirrors
     apt update
 fi
 
-if ask_yes_no "Möchtest du unnötige Standardprogramme entfernen?"; then
+if ask_yes_no "Unnötige Standardprogramme entfernen?"; then
     remove_unneeded
 fi
 
-if ask_yes_no "Möchtest du gewünschte Programme installieren?"; then
+if ask_yes_no "Ausgewählte Programme installieren?"; then
     install_programs
 fi
 
