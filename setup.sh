@@ -28,7 +28,8 @@ change_mirrors() {
 # 2. Unnötige Programme deinstallieren
 remove_unneeded() {
     echo -e "${GREEN}>>> Entferne unnötige Standardprogramme...${RESET}"
-    apt purge -y hexchat celluloid hypnotix rhythmborhythmbox rhythmbox-data rhythmbox-plugin-tray-iconx libreoffice*
+    apt purge -y hexchat celluloid hypnotix rhythmbox rhythmbox-data \
+        rhythmbox-plugin-tray-icon libreoffice*
     apt autoremove -y
 }
 
