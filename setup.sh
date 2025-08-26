@@ -125,12 +125,8 @@ install_programs() {
         app_from_repo+="papirus-icon-theme "
     fi
 
-    if ask_yes_no "Softmaker Office installieren?"; then
-        mkdir -p /etc/apt/keyrings
-        wget -qO- https://shop.softmaker.com/repo/linux-repo-public.key | gpg --dearmor > /etc/apt/keyrings/softmaker.gpg
-        echo "deb [signed-by=/etc/apt/keyrings/softmaker.gpg] https://shop.softmaker.com/repo/apt stable non-free" > /etc/apt/sources.list.d/softmaker.list
-        repo_added=true
-        office_added=true
+    if ask_yes_no "Möchtest du SoftMaker Office installieren?"; then
+        install_softmaker
     fi
 
     if ask_yes_no "Steam installieren?"; then
@@ -141,15 +137,6 @@ install_programs() {
     if ask_yes_no "Synology Drive Client installieren?"; then
         wget -O /tmp/synology-drive-client.deb https://global.synologydownload.com/download/Utility/SynologyDriveClient/3.5.2-16111/Ubuntu/Installer/synology-drive-client-16111.x86_64.deb
         synology_added=true
-    fi
-
-    if ask_yes_no "ULauncher (MacOS inspirierter Launcher) installieren?"; then
-        curl -s https://api.github.com/repos/Ulauncher/Ulauncher/releases/latest \
-            | grep "browser_download_url.*deb" \
-            | cut -d : -f 2,3 \
-            | tr -d \" \
-            | wget -i - -O /tmp/ulauncher.deb
-        ulauncher_added=true
     fi
 
     if ask_yes_no "VS Code installieren?"; then
@@ -189,11 +176,6 @@ install_programs() {
         echo -e "${GREEN}>>> VS Code wurde installiert.${RESET}"
     fi
 
-    if [ "$office_added" = true ]; then
-        apt install -y softmaker-freeoffice-2024
-        echo -e "${GREEN}>>> Softmaker Office wurde installiert.${RESET}"
-    fi
-
     if [ "$docker_added" = true ]; then
         apt install -y docker.io docker-compose
         systemctl enable docker
@@ -212,12 +194,51 @@ install_programs() {
         echo -e "${GREEN}>>> Synology Drive Client wurde installiert.${RESET}"
     fi
 
-    if [ "$ulauncher_added" = true ]; then
-        apt install -y /tmp/ulauncher.deb
-        rm /tmp/ulauncher.deb
-        echo -e "${GREEN}>>> ULauncher wurde installiert.${RESET}"
-    fi
 } 
+
+install_softmaker() {
+    echo -e "${GREEN}>>> SoftMaker Office Installation${RESET}"
+    echo "Welche Version von SoftMaker Office möchtest du installieren?"
+    echo "1) FreeOffice (kostenlos)"
+    echo "2) SoftMaker Office Standard (kommerziell)"
+    echo "3) SoftMaker Office NX Universal (Abo)"
+    echo "0) Keine Installation"
+
+    read -p "Bitte wähle [0-3]: " choice
+    case $choice in
+        1)
+            add_softmaker_repo
+            apt update
+            apt install -y softmaker-freeoffice-2024            ;;
+        2)
+            echo -e "${GREEN}Installiere SoftMaker Office Standard...${RESET}"
+            wget -qO- https://shop.softmaker.com/repo/linux-repo-public.key | gpg --dearmor -o /usr/share/keyrings/softmaker-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/softmaker-keyring.gpg] https://shop.softmaker.com/repo/apt stable non-free" > /etc/apt/sources.list.d/softmaker.list
+            apt update
+            apt install -y softmaker-office-2021
+            ;;
+        3)
+            echo -e "${GREEN}Installiere SoftMaker Office NX Universal...${RESET}"
+            wget -qO- https://shop.softmaker.com/repo/linux-repo-public.key | gpg --dearmor -o /usr/share/keyrings/softmaker-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/softmaker-keyring.gpg] https://shop.softmaker.com/repo/apt stable non-free" > /etc/apt/sources.list.d/softmaker.list
+            apt update
+            apt install -y softmaker-office-nx
+            ;;
+        0)
+            echo -e "${YELLOW}SoftMaker Office wird nicht installiert.${RESET}"
+            ;;
+        *)
+            echo -e "${RED}Ungültige Auswahl!${RESET}"
+            ;;
+    esac
+}
+
+add_softmaker_repo() {
+    mkdir -p /etc/apt/keyrings
+    wget -qO- https://shop.softmaker.com/repo/linux-repo-public.key | gpg --dearmor -o /usr/share/keyrings/softmaker-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/softmaker-keyring.gpg] https://shop.softmaker.com/repo/apt stable non-free" > /etc/apt/sources.list.d/softmaker.list
+}
+
 
 install_flatpak_programs() {
     flatpak_apps=""
