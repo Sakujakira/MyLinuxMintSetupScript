@@ -36,9 +36,9 @@ remove_unneeded() {
 # 3. Eigene Programme installieren
 install_programs() {
     echo -e "${GREEN}>>> Installiere Basisprogramme...${RESET}"
-    apt -qq update
+    apt update
     apt install -y git curl htop neofetch vlc heif-gdk-pixbuf heif-thumbnailer \
-        ca-certificates gimp ffmpeg ffmpegthumbnailer gparted 
+        ca-certificates gimp ffmpeg ffmpegthumbnailer gparted wget gpg
     echo -e "${GREEN}Basisprogramme wurden installiert.${RESET}"
     echo -e "${GREEN}>>> Firefox und Thunderbrid um notwendige Pakete erweitern...${RESET}"
     apt install -y firefox-locale-de thunderbird-locale-de
@@ -55,6 +55,27 @@ install_programs() {
     synology_added=false
     ulauncher_added=false
     vscode_added=false
+
+    declare -a repo_programs=(
+        [audacity]="" 
+        [fancontrol]="fancontrol lm-sensors"
+        [filezilla]=""
+        [handbrake]="handbrake handbrake-cli"
+        [inkscape]=""
+        [keepassxc]=""
+        [lutris]=""
+        [papirus-icon-theme]=""
+        [steam-installer]="steam-installer steam-devices"
+    )
+
+    for program in "${!repo_programs[@]}"; 
+    do
+        if ask_yes_no "$program installieren?"; then
+            #app_from_repo+="${repo_programs[$program]} "
+            echo $program
+            echo ${repo_programs[$program]}        
+        fi
+    done
 
     if ask_yes_no "Audacity installieren?"; then
         app_from_repo+="audacity "
@@ -140,9 +161,9 @@ install_programs() {
     fi
 
     if ask_yes_no "VS Code installieren?"; then
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /usr/share/keyrings/ms-vscode.gpg > /dev/null
-        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/ms-vscode.gpg] https://packages.microsoft.com/repos/code stable main" | \
-            tee /etc/apt/sources.list.d/vscode.list
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+        install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
+        rm microsoft.gpg
         repo_added=true
         vscode_added=true
     fi
@@ -177,7 +198,7 @@ install_programs() {
     fi
 
     if [ "$docker_added" = true ]; then
-        apt install -y docker.io docker-compose
+        apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         systemctl enable docker
         usermod -aG docker "$SUDO_USER"
         echo -e "${GREEN}>>> Docker wurde installiert. Bitte melde dich ab und wieder an, damit du Docker ohne sudo nutzen kannst.${RESET}"
