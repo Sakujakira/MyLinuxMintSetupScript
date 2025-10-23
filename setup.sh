@@ -57,25 +57,16 @@ install_programs() {
     vscode_added=false
 
     declare -a repo_programs=(
-        [audacity]="" 
-        [fancontrol]="fancontrol lm-sensors"
-        [filezilla]=""
-        [handbrake]="handbrake handbrake-cli"
-        [inkscape]=""
-        [keepassxc]=""
-        [lutris]=""
-        [papirus-icon-theme]=""
-        [steam-installer]="steam-installer steam-devices"
+        [audacity]="audacity "
+        [fancontrol]="fancontrol lm-sensors "
+        [filezilla]="filezilla "
+        [handbrake]="handbrake handbrake-cli "
+        [inkscape]="inkscape "
+        [keepassxc]="keepassxc "
+        [lutris]="lutris "
+        [papirus-icon-theme]="papirus-icon-theme "
+        [steam-installer]="steam-installer steam-devices "
     )
-
-    for program in "${!repo_programs[@]}"; 
-    do
-        if ask_yes_no "$program installieren?"; then
-            #app_from_repo+="${repo_programs[$program]} "
-            echo $program
-            echo ${repo_programs[$program]}        
-        fi
-    done
 
     if ask_yes_no "Audacity installieren?"; then
         app_from_repo+="audacity "
