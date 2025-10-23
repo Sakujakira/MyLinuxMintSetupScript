@@ -309,7 +309,7 @@ install_flatpak_programs() {
     fi
     if [[ -n "$flatpak_apps" ]]; then
         echo -e "${GREEN}>>> Installiere Flatpak-Programme...${RESET}"
-        echo "flatpak install -y flathub $flatpak_apps"
+        flatpak install -y flathub $flatpak_apps
     else
         echo -e "${YELLOW}Keine Flatpak Programme ausgewählt.${RESET}"
     fi
@@ -326,6 +326,7 @@ install_flatpak_programs() {
     if [ "$discord_access" = true ]; then
         flatpak override com.discordapp.Discord --filesystem=home
     fi
+    
     echo -e "${GREEN}Flatpak Programme wurden installiert.${RESET}"
 }
 
